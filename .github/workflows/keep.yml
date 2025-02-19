@@ -1,35 +1,35 @@
- 姓名             : 批量访问保活进程
+name: 批量访问保活进程
 
- 在…上             :
-  附表             :
+on:
+  schedule:
     # 使用cron表达式定义任务运行的时间
     #github最小时间间隔为10分钟
-    - 克龙             : ' */60 * * * * '
-  工作流程             :
+    - cron: '*/60 * * * *'
+  workflow_dispatch:
 
- 乔布斯             :
-  部署             :
-    逃跑             : 最新的
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
 
-    台阶             :
-      - 姓名             : 结帐码
-        使用            : 行动/结账@v3
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - 姓名           : 安装依赖
-        跑          : |
-          安装JQ
+      - name: 安装依赖
+        run: |
+          sudo apt-get install jq
 
-      - 姓名         : 访问各个serv00并执行保活脚本
-        环境        :
-          霍茨_杰森              : $ {              { 秘密。霍斯_杰森 }              }
-          电报机              : $ {              { secrets.TELEGRAM_TOKEN }              }
-          电报_用户码              : $ {              { secrets.TELEGRAM_USERID }              }
-          Wxsendky              : $ {              { 秘密。Wxsendky }              }
-          版型             : $ {            { 机密。发送式 }          }
-          按钮_url        : $ {      { 秘密。按钮。 }    }
-          自动更新           : $ {          { 变更。自动更新 }         }
-          物流信息        : $ {       { 输入信息 }      }
-          象征     : $ {    { 秘密。 }   }
-        跑  : |
-          奇蒙德+X。/重新命名_节点。
+      - name: 访问各个serv00并执行保活脚本
+        env:
+          HOSTS_JSON: ${{ secrets.HOSTS_JSON }}
+          TELEGRAM_TOKEN: ${{secrets.TELEGRAM_TOKEN}}
+          TELEGRAM_USERID: ${{secrets.TELEGRAM_USERID}}
+          WXSENDKEY: ${{secrets.WXSENDKEY}}
+          SENDTYPE: ${{secrets.SENDTYPE}}
+          BUTTON_URL: ${{secrets.BUTTON_URL}}
+          AUTOUPDATE: ${{vars.AUTOUPDATE}}
+          LOGININFO: ${{vars.LOGININFO}}
+          TOKEN: ${{secrets.TOKEN}}
+        run: |
+          chmod +x ./revive_node.sh
           ./revive_node.sh
